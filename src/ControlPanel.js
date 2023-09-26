@@ -3,7 +3,7 @@ import axios from "axios";
 import {RocketState} from "./RocketState";
 
 
-function liftOf(){
+function liftOf() {
     axios.get("http://localhost:3005/start-mission")
         .then((res) => {
             alert(res.data);
@@ -18,22 +18,26 @@ export default function ControlPanel({rocket}) {
             axios.get("http://localhost:3005/mission-status")
                 .then((res) => {
                     setRocketStatus(res.data === "go" ? RocketState.READY : RocketState.NOT_READY);
+                })
+                .catch((error) => {
+                    console.error("Error fetching mission status:", error);
                 });
         }, 5000);
         return () => clearInterval(interval);
     }, []);
 
+
     return (
         <div className="control-panel">
-            <div className="control-panel_title">
+            <h2 className="control-panel_title">
                 Control Panel
-            </div>
+            </h2>
             <div className="control-panel_content">
 
                 <div className="control-panel_content_rocket-status">
                     {rocketStatus}
                 </div>
-                <div onClick={() => liftOf()}  className="control-panel_content_button">
+                <div onClick={() => liftOf()} className="control-panel_content_button">
                     LIFT OFF
                 </div>
             </div>
